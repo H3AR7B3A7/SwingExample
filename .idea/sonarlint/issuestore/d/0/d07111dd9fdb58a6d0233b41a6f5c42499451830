@@ -1,8 +1,0 @@
-
-esquid:MaximumInheritanceDepth"<This class has 6 parents which is greater than 5 authorized.(âŠãÉ
-Gsquid:S1148Ì"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8”ìºÞå-
-Fsquid:S1148S"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8­èÇÞå-
-Hsquid:S1948",Make "controller" transient or serializable.(š·Âëüÿÿÿÿ
-Hsquid:S1602,",Remove useless curly braces around statement(û•Âúýÿÿÿÿ
-nsquid:S3776{"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(æÙû«ýÿÿÿÿ
-wsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¢Õšêøÿÿÿÿ
