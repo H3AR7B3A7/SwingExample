@@ -57,7 +57,7 @@ public class Controller {
                 break;
             default:
                 empCategory = EmploymentCategory.OTHER;
-                System.err.println(empCat);
+                System.err.println(empCat); // TODO : handle this somehow
                 break;
         }
 

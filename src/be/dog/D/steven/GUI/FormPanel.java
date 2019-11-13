@@ -3,8 +3,6 @@ package be.dog.D.steven.GUI;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 class FormPanel extends JPanel {
@@ -15,7 +13,7 @@ class FormPanel extends JPanel {
     private JTextField nameField;
     private JTextField occupationField;
     private JButton okBtn;
-    private FormListener formListener;
+    private transient FormListener formListener;
     private JList<AgeCategory> ageList;
     private JComboBox<String> empCombo;
     private JCheckBox citizenCheck;
@@ -70,7 +68,7 @@ class FormPanel extends JPanel {
         genderGroup.add(maleRadio);
         genderGroup.add(femaleRadio);
 
-        //Set up tax ID
+        //Set tax ID to be greyed out
         taxLabel.setEnabled(false);
         taxField.setEnabled(false);
 
@@ -102,31 +100,25 @@ class FormPanel extends JPanel {
         empCombo.setSelectedIndex(0);
 
         // OK Button ActionListener holding ActionPerformed Method
-        okBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                // Invoking Methods to get required data
-                String name = nameField.getText();
-                String occupation = occupationField.getText();
-                AgeCategory ageCat = ageList.getSelectedValue();
-                String empCat = (String)empCombo.getSelectedItem();
-                String taxId = taxField.getText();
-                boolean euCitizen = citizenCheck.isSelected();
-                String gender = genderGroup.getSelection().getActionCommand();
+        okBtn.addActionListener(actionEvent -> {
+            // Invoking Methods to get required data
+            String name = nameField.getText();
+            String occupation = occupationField.getText();
+            AgeCategory ageCat = ageList.getSelectedValue();
+            String empCat = (String)empCombo.getSelectedItem();
+            String taxId = taxField.getText();
+            boolean euCitizen = citizenCheck.isSelected();
+            String gender = genderGroup.getSelection().getActionCommand();
 
-                // Commandline tests
-                // System.out.println(empCat);
-                // System.out.println(ageCat.getId());
+            // Creating a new type of 'Event' from class FormEvent
+            FormEvent ev = new FormEvent(this,name,occupation,ageCat.getId(),
+                    empCat,taxId,euCitizen,gender);
 
-                // Creating a new type of 'Event' from class FormEvent
-                FormEvent ev = new FormEvent(this,name,occupation,ageCat.getId(),
-                        empCat,taxId,euCitizen,gender);
-
-                // Pass FormEvent to FormListener
-                if(formListener !=null){
-                    formListener.formEventOccurred(ev);
-                }
+            // Pass FormEvent to FormListener
+            if(formListener !=null){
+                formListener.formEventOccurred(ev);
             }
+
         });
 
         // Creating an outer and inner border for FormPanel
@@ -134,10 +126,11 @@ class FormPanel extends JPanel {
         Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
         setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
+        // Cleaner to set up components with void method
         layoutComponents();
     }
 
-    // Cleaning up layout components
+    // Setting up layout components
     private void layoutComponents(){
         // Choosing layout
         setLayout(new GridBagLayout());
@@ -188,7 +181,6 @@ class FormPanel extends JPanel {
 
         gc.gridx=1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        // gc.insets = new Insets(0,0,0,0);
         add(ageList, gc);
 
         ///////////NEXT ROW//////////

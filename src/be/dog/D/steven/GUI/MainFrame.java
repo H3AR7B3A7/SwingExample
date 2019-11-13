@@ -17,7 +17,7 @@ public class MainFrame extends JFrame implements ActionListener {
     private TextPanel textPanel;
     private FormPanel formPanel;
     private JFileChooser fileChooser;
-    private Controller controller;
+    private transient Controller controller;
     private TablePanel tablePanel;
 
 
@@ -41,15 +41,13 @@ public class MainFrame extends JFrame implements ActionListener {
         tablePanel.setData(controller.getPeople());
 
         // Pass new PersonTableListener to implement rowDeleted in tablePanel
-        tablePanel.setPersonTableListener(row -> {
-            controller.removePerson(row);
-        });
+        tablePanel.setPersonTableListener(row -> controller.removePerson(row));
 
         // One fileChooser for import/export
         fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new PersonFileFilter()); //.addChoosableFileFilter to add more
 
-        // Set J!!!Menu Bar
+        // Set J!!!Menu Bar in method for cleaner code
         setJMenuBar(createMenuBar());
 
         // StringListener: output directed to textPanel
@@ -74,19 +72,7 @@ public class MainFrame extends JFrame implements ActionListener {
             String saveName = JOptionPane.showInputDialog(MainFrame.this,
                     "File name", "Save file", JOptionPane.WARNING_MESSAGE);
             // Quick save to a local temp.per
-            if (saveName != null && !saveName.equals("")) {
-                if (saveName.matches("^[a-zA-Z0-9_.-]{1,18}$")) {
-                    File file = new File(saveName + ".per");
-                    try {
-                        controller.saveToFile(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    textPanel.appendText("Table saved...\n");
-                } else {
-                    JOptionPane.showMessageDialog(MainFrame.this, "Invalid file name!");
-                }
-            }
+            quickSave(saveName);
         });
 
         // Add content to Main Frame Layout
@@ -103,6 +89,23 @@ public class MainFrame extends JFrame implements ActionListener {
         // Show Main Frame
         setVisible(true);
 
+    }
+
+    // Factored out quickSave method
+    private void quickSave(String saveName) {
+        if (saveName != null && !saveName.equals("")) {
+            if (saveName.matches("^[a-zA-Z0-9_.-]{1,18}$")) {
+                File file = new File(saveName + ".per");
+                try {
+                    controller.saveToFile(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                textPanel.appendText("Table saved...\n");
+            } else {
+                JOptionPane.showMessageDialog(MainFrame.this, "Invalid file name!");
+            }
+        }
     }
 
     // Methods to switch panels
@@ -195,19 +198,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     "File name", "Save file", JOptionPane.WARNING_MESSAGE);
             // Save method goes here !=null catches cancel, !"" catches empty input
             // Quick save to a local temp.per
-            if (saveName != null && !saveName.equals("")) {
-                if (saveName.matches("^[a-zA-Z0-9_.-]{1,18}$")) { //regex could catch empty input too
-                    File file = new File(saveName + ".per");
-                    try {
-                        controller.saveToFile(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    textPanel.appendText("Table saved...\n");
-                } else {
-                    JOptionPane.showMessageDialog(MainFrame.this, "Invalid file name!");
-                }
-            }
+            quickSave(saveName);
 
             int action = JOptionPane.showConfirmDialog(MainFrame.this,
                     "Exit application?", "Confirm", JOptionPane.OK_CANCEL_OPTION);
