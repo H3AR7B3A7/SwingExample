@@ -22,7 +22,7 @@ class App {
         //      public void run() {
         //          new MainFrame();
 
-        // Robuster MULTITHREADING
+        // More robust MULTITHREADING
         //////////
         // with 'Lambda':
                 SwingUtilities.invokeLater(() -> new MainFrame());
